@@ -23,7 +23,7 @@
         </style>
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
+        <div class="">
             @include('layouts.sidebar')
             @include('layouts.navigation')
             @include('components.modal-logout')

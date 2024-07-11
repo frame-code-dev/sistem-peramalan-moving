@@ -6,6 +6,7 @@ use App\Http\Controllers\PemasukanController;
 use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\PeramalanController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use App\Models\Pemasukan;
 use App\Models\Pengeluaran;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,8 @@ Route::middleware('auth')->group(function () {
         Route::get('peramalan',[PeramalanController::class,'index'])->name('peralaman.index');
         // Laporan
         Route::get('laporan',[LaporanController::class,'index'])->name('laporan.index');
+        // User
+        Route::resource('user',UserController::class);
     });
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

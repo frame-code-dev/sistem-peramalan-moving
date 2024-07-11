@@ -1,54 +1,14 @@
 <x-app-layout>
     @push('js')
         <script>
-            // monitoring pie chart
-            Highcharts.chart('monitoring', {
-                chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false,
-                    type: 'pie'
-                },
-                title: {
-                    text: '',
-                    align: 'left'
-                },
-                tooltip: {
-                    pointFormat: '{series.name}: <b>{point.y}</b>'
-                },
-                accessibility: {
-                    point: {
-                        valueSuffix: ''
-                    }
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            distance: 20,
-                            // format: '{point.y}'
-                        },
-                        showInLegend: true
-                    }
-                },
-                series: [{
-                    name: 'Jumlah Pasien',
-                    colorByPoint: true,
-                    data: [
-                        20,10,10
-                    ]
-                }]
-            });
             // monitoring kunjungan pasien
             var options = {
                 series: [{
                     name: 'Online',
-                    data: [ 20,10,10]
+                    data: @json($nominal_pemasukan)
                 }, {
                 name: 'Offline',
-                    data:[ 20,10,10]
+                    data:@json($nominal_pengeluaran)
                 }],
                 chart: {
                     height: 350,
@@ -61,11 +21,9 @@
                     curve: 'smooth'
                 },
                 xaxis: {
-                    type: 'datetime',
+                    type: 'date',
                         categories:
-                         [
-                             '2018-09-19T00:00:00.000Z',
-                         ]
+                            @json($bulan)
 
                 },
                 tooltip: {
@@ -80,7 +38,7 @@
         </script>
     @endpush
     <div class="p-4 sm:ml-64 pt-20 h-screen">
-        <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2 w-full mt-4">
+        <div class="grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-2 w-full mt-4">
             <div class="card p-5 w-full border bg-white h-[127px] relative">
                 <div class="flex gap-5">
                     <div>
@@ -92,10 +50,10 @@
                     </div>
                     <div class="mt-3">
                         <h2 class="text-theme-text text-3xl font-bold tracking-tighter">
-                            20.0000
+                            Rp. {{ number_format($pemasukan,2, ",", ".") }}
                         </h2>
                         <p class="text-gray-500 text-sm tracking-tighter">
-                            Total Pasien
+                            Total Pemasukan
                         </p>
                     </div>
                     {{-- <a href="{{ route('dashboard-detail') }}" class="btn-detail"><iconify-icon icon="solar:document-outline"></iconify-icon> Detail</a> --}}
@@ -113,10 +71,10 @@
                         </div>
                         <div class="mt-3">
                             <h2 class="text-theme-text text-3xl font-bold tracking-tighter">
-                             200.00.000
+                             Rp. {{ number_format($pengeluaran,2, ",", ".") }}
                             </h2>
                             <p class="text-gray-500 text-sm tracking-tighter">
-                                Jumlah Pasien Reservasi
+                                Jumlah Pengeluaran
                             </p>
                         </div>
                     </div>
@@ -125,38 +83,14 @@
                     </div>
                 </div>
             </div>
-            <div class="card p-5 w-full border bg-white h-[127px] relative">
-                <div class="flex gap-5 justify-between">
-                    <div class="flex gap-5">
-                        <div>
-                            <button class="w-20 h-20 p-5 rounded-full bg-[#FF3649]/20 flex align-middle items-center content-center mx-auto">
-                                <svg class="text-3xl mt-1 text-[#FF3649] items-center content-center mx-auto" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-3 5h3m-6 0h.01M12 16h3m-6 0h.01M10 3v4h4V3h-4Z"/>
-                                </svg>
 
-                            </button>
-                        </div>
-                        <div class="mt-3">
-                            <h2 class="text-theme-text text-3xl font-bold tracking-tighter">
-                              Rp. 2.000.000
-                            </h2>
-                            <p class="text-gray-500 text-sm tracking-tighter">
-                                Jumlah Pasien Reservasi
-                            </p>
-                        </div>
-                    </div>
-                    <div>
-                        <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Belum Verifikasi</span>
-                    </div>
-                </div>
-            </div>
         </div>
-        <div class="grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-2 w-full mt-2">
+        <div class="grid lg:grid-cols-1 md:grid-cols-2 grid-cols-1 gap-2 w-full mt-2">
             <div class="card bg-white p-5 mt-4 border rounded-md w-full relative">
                 <div class="head flex lg:flex-row flex-col justify-between gap-5 mb-2">
                     <div class="title">
                         <h2 class="font-semibold tracking-tighter text-lg text-theme-text">
-                            Monitoring Presentase Kunjungan Pasien
+                            Monitoring Presentase Pemasukan dan Pengeluaran
                         </h2>
                     </div>
                 </div>
@@ -165,19 +99,7 @@
                     <div id="kunjungan"></div>
                 </div>
             </div>
-            <div class="card bg-white p-5 mt-4 border rounded-md w-full relative">
-                <div class="head flex lg:flex-row flex-col justify-between gap-5 mb-2">
-                    <div class="title">
-                        <h2 class="font-semibold tracking-tighter text-lg text-theme-text">
-                            Monitoring Presentase Pasien
-                        </h2>
-                    </div>
-                </div>
-                <hr>
-                <div class="lg:mt-0 pt-10 mx-auto">
-                    <div id="monitoring"></div>
-                </div>
-            </div>
+
         </div>
     </div>
 </x-app-layout>
